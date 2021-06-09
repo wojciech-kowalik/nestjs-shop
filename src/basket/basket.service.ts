@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { AddProductDto } from './dto/add-product.dto';
 import { ShopService } from '../shop/shop.service';
 import {
@@ -14,7 +14,10 @@ import {
 export class BasketService {
   private items: AddProductDto[] = [];
 
-  constructor(@Inject(ShopService) private shopService: ShopService) {}
+  constructor(
+    @Inject(forwardRef(() => ShopService))
+    private shopService: ShopService,
+  ) {}
 
   add(item: AddProductDto): AddProductToBasketResponse {
     this.items.push(item);
@@ -42,18 +45,26 @@ export class BasketService {
     return this.items;
   }
 
-  getTotalPrice(): GetTotalPriceResponse {
-    if (!this.items.every((item: AddProductDto) => this.shopService.hasProduct(item.name))) {
+  async getTotalPrice(): Promise<GetTotalPriceResponse> {
+    if (
+      !this.items.every((item: AddProductDto) =>
+        this.shopService.hasProduct(item.name),
+      )
+    ) {
       return {
         isSuccess: false,
       };
     }
 
-    return this.items
-      .map(
-        (item: AddProductDto) =>
-          this.shopService.getPriceOfProduct(item.name) * item.count * 1.23,
+    return (
+      await Promise.all(
+        this.items.map(
+          async (item: AddProductDto) =>
+            (await this.shopService.getPriceOfProduct(item.name)) *
+            item.count *
+            1.23,
+        ),
       )
-      .reduce((prev, curr) => prev + curr, 0);
+    ).reduce((prev, curr) => prev + curr, 0);
   }
 }
