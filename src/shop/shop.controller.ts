@@ -1,15 +1,23 @@
-import { Get, Inject, Controller, Param, Delete, Post, Body } from "@nestjs/common";
+import {
+  Get,
+  Inject,
+  Controller,
+  Param,
+  Delete,
+  Post,
+  Body,
+} from '@nestjs/common';
 import { ShopService } from './shop.service';
-import { GetProductListResponse, GetProductResponse } from './interfaces/shop';
+import { GetPaginatedListResponse, GetProductListResponse, GetProductResponse } from "./interfaces/shop";
 import { ShopItem } from './shop-item.entity';
 
 @Controller('shop')
 export class ShopController {
   constructor(@Inject(ShopService) private shopService: ShopService) {}
 
-  @Get('/')
-  getList(): Promise<GetProductListResponse> {
-    return this.shopService.getProducts();
+  @Get('/:page')
+  getList(@Param('page') page: string): Promise<GetPaginatedListResponse> {
+    return this.shopService.getProducts(+page);
   }
 
   @Get('/:id')

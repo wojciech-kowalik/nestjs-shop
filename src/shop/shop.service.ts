@@ -1,6 +1,9 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { BasketService } from '../basket/basket.service';
-import { GetProductListResponse, GetProductResponse } from "./interfaces/shop";
+import {
+  GetPaginatedListResponse,
+  GetProductListResponse,
+} from './interfaces/shop';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ShopItem } from './shop-item.entity';
 import { Repository } from 'typeorm';
@@ -14,8 +17,19 @@ export class ShopService {
     private shopItemRepository: Repository<ShopItem>,
   ) {}
 
-  async getProducts(): Promise<GetProductListResponse> {
-    return await this.shopItemRepository.find();
+  async getProducts(page = 1): Promise<GetPaginatedListResponse> {
+    const maxPerPage = 3;
+    const [items, count] = await this.shopItemRepository.findAndCount({
+      skip: maxPerPage * (page - 1),
+      take: maxPerPage,
+    });
+
+    const totalPages = Math.ceil(count / maxPerPage);
+
+    return {
+      items,
+      totalPages,
+    };
   }
 
   async getProduct(id: string): Promise<ShopItem> {
@@ -31,10 +45,11 @@ export class ShopService {
   }
 
   async hasProduct(name: string): Promise<boolean> {
-    return (await this.getProducts()).some((item) => item.name === name);
+    return (await this.getProducts()).items.some((item) => item.name === name);
   }
 
   async getPriceOfProduct(name: string): Promise<number> {
-    return (await this.getProducts()).find((item) => item.name === name).price;
+    return (await this.getProducts()).items.find((item) => item.name === name)
+      .price;
   }
 }

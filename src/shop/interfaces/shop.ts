@@ -7,3 +7,7 @@ export interface ShopItem {
 
 export type GetProductResponse = ShopItem;
 export type GetProductListResponse = ShopItem[];
+export interface GetPaginatedListResponse {
+  items: ShopItem[];
+  totalPages: number;
+}

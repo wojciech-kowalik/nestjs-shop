@@ -6,7 +6,7 @@ export class ShopItem {
   id: string;
 
   @Column({
-    length: 60,
+    length: 50,
   })
   name: string;
 
