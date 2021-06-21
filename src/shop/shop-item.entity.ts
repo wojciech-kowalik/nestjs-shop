@@ -1,7 +1,9 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { ShopItemInterface } from './interfaces/shop';
+import { BasketItem } from "../basket/basket-item.entity";
 
 @Entity()
-export class ShopItem {
+export class ShopItem implements ShopItemInterface {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -19,10 +21,13 @@ export class ShopItem {
 
   @Column({
     type: 'float',
-    precision: 6,
+    precision: 7,
     scale: 2,
   })
   price: number;
+
+  @OneToOne((type) => BasketItem, (entity) => entity.shopItem)
+  basketItem: BasketItem;
 
   @Column({
     default: () => 'CURRENT_TIMESTAMP',

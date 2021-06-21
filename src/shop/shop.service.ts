@@ -45,11 +45,11 @@ export class ShopService {
   }
 
   async hasProduct(name: string): Promise<boolean> {
-    return (await this.getProducts()).items.some((item) => item.name === name);
+    return (await this.getProducts()).items.some((item) => item.id === name);
   }
 
   async getPriceOfProduct(name: string): Promise<number> {
-    return (await this.getProducts()).items.find((item) => item.name === name)
+    return (await this.getProducts()).items.find((item) => item.id === name)
       .price;
   }
 }

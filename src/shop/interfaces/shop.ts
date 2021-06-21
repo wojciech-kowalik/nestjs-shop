@@ -1,13 +1,13 @@
-export interface ShopItem {
+export interface ShopItemInterface {
   id: string;
   name: string;
   description: string;
   price: number;
 }
 
-export type GetProductResponse = ShopItem;
-export type GetProductListResponse = ShopItem[];
+export type GetProductResponse = ShopItemInterface;
+export type GetProductListResponse = ShopItemInterface[];
 export interface GetPaginatedListResponse {
-  items: ShopItem[];
+  items: ShopItemInterface[];
   totalPages: number;
 }

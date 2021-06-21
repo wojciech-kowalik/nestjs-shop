@@ -8,7 +8,10 @@ import {
   Body,
 } from '@nestjs/common';
 import { ShopService } from './shop.service';
-import { GetPaginatedListResponse, GetProductListResponse, GetProductResponse } from "./interfaces/shop";
+import {
+  GetPaginatedListResponse,
+  GetProductResponse,
+} from './interfaces/shop';
 import { ShopItem } from './shop-item.entity';
 
 @Controller('shop')

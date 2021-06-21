@@ -23,17 +23,22 @@ export class BasketController {
   constructor(@Inject(BasketService) private basketService: BasketService) {}
 
   @Post('/')
-  create(@Body() item: AddProductDto): AddProductToBasketResponse {
+  create(@Body() item: AddProductDto): Promise<AddProductToBasketResponse> {
     return this.basketService.add(item);
   }
 
-  @Delete('/:index')
-  delete(@Param('index') index: string): RemoveProductFromBasketResponse {
-    return this.basketService.remove(+index);
+  @Delete('/clear')
+  clear() {
+    return this.basketService.clearBasket();
+  }
+
+  @Delete('/:id')
+  delete(@Param('id') id: string): Promise<RemoveProductFromBasketResponse> {
+    return this.basketService.remove(id);
   }
 
   @Get('/')
-  getAll(): ProductsFromBasketResponse {
+  getAll(): Promise<ProductsFromBasketResponse> {
     return this.basketService.getAll();
   }
 
