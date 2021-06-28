@@ -1,6 +1,6 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ShopItemInterface } from './interfaces/shop';
-import { BasketItem } from "../basket/basket-item.entity";
+import { BasketItem } from '../basket/basket-item.entity';
 
 @Entity()
 export class ShopItem implements ShopItemInterface {
@@ -17,7 +17,7 @@ export class ShopItem implements ShopItemInterface {
     default: null,
     nullable: true,
   })
-  description: string|null;
+  description: string | null;
 
   @Column({
     type: 'float',
