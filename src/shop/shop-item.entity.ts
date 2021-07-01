@@ -1,4 +1,9 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ShopItemInterface } from './interfaces/shop';
 import { BasketItem } from '../basket/basket-item.entity';
 
@@ -26,8 +31,8 @@ export class ShopItem implements ShopItemInterface {
   })
   price: number;
 
-  @OneToOne((type) => BasketItem, (entity) => entity.shopItem)
-  basketItem: BasketItem;
+  @OneToMany((type) => BasketItem, (entity) => entity.shopItem)
+  basketItem: BasketItem[];
 
   @Column({
     default: () => 'CURRENT_TIMESTAMP',

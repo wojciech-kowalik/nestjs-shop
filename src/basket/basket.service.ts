@@ -9,18 +9,22 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BasketItem } from './basket-item.entity';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class BasketService {
   constructor(
     @Inject(forwardRef(() => ShopService))
     private shopService: ShopService,
+    @Inject(forwardRef(() => UserService))
+    private userService: UserService,
     @InjectRepository(BasketItem)
     private basketItemRepository: Repository<BasketItem>,
   ) {}
 
   async add(item: AddProductDto): Promise<AddProductToBasketResponse> {
-    const shopItem = await this.shopService.getProduct(item.id);
+    const shopItem = await this.shopService.getProduct(item.productId);
+    const user = await this.userService.getUser(item.userId);
 
     if (!shopItem) {
       return {
@@ -31,6 +35,7 @@ export class BasketService {
     const saved = await this.basketItemRepository.save(item);
 
     saved.shopItem = shopItem;
+    saved.user = user;
     await this.basketItemRepository.save(saved);
 
     return {
@@ -48,23 +53,26 @@ export class BasketService {
     };
   }
 
-  async clearBasket() {
-    await this.basketItemRepository.delete({});
+  async clearBasket(userId: string) {
+    const user = await this.userService.getUser(userId);
+
+    await this.basketItemRepository.delete({ user });
   }
 
-  async getAll(): Promise<BasketItem[]> {
+  async getAllForUser(userId: string): Promise<BasketItem[]> {
+    const user = await this.userService.getUser(userId);
+
     return await this.basketItemRepository.find({
+      where: {
+        user,
+      },
       relations: ['shopItem'],
     });
   }
 
-  async getTotalPrice(): Promise<GetTotalPriceResponse> {
-    const items = await this.getAll();
-    if (
-      !items.every((item: AddProductDto) =>
-        this.shopService.hasProduct(item.id),
-      )
-    ) {
+  async getTotalPrice(userId: string): Promise<GetTotalPriceResponse> {
+    const items = await this.getAllForUser(userId);
+    if (!items.every((item) => this.shopService.hasProduct(item.id))) {
       return {
         isSuccess: false,
       };

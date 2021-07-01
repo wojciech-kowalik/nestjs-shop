@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BasketItem } from '../basket/basket-item.entity';
 
 @Entity()
 export class User {
@@ -9,4 +10,7 @@ export class User {
     length: 255,
   })
   email: string;
+
+  @OneToMany((type) => BasketItem, (entity) => entity.user)
+  basketItems: BasketItem[];
 }
