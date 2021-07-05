@@ -11,6 +11,7 @@ import { AddProductDto } from './dto/add-product.dto';
 import {
   ProductsFromBasketResponse,
   GetTotalPriceResponse,
+  GetStatisticsResponse,
 } from '../shop/interfaces/basket';
 import {
   AddProductToBasketResponse,
@@ -37,13 +38,27 @@ export class BasketController {
     return this.basketService.remove(id);
   }
 
+  @Get('/admin')
+  getBasketForAdmin(): Promise<ProductsFromBasketResponse> {
+    return this.basketService.getAllForAdmin();
+  }
+
+  @Get('/statistics')
+  getStatistics(): Promise<GetStatisticsResponse> {
+    return this.basketService.getStatistics();
+  }
+
   @Get('/:userId')
-  getAll(@Param('userId') userId: string): Promise<ProductsFromBasketResponse> {
+  getBasket(
+    @Param('userId') userId: string,
+  ): Promise<ProductsFromBasketResponse> {
     return this.basketService.getAllForUser(userId);
   }
 
   @Get('/total-price/:userId')
-  getTotalPrice(@Param('userId') userId: string): Promise<GetTotalPriceResponse> {
+  getTotalPrice(
+    @Param('userId') userId: string,
+  ): Promise<GetTotalPriceResponse> {
     return this.basketService.getTotalPrice(userId);
   }
 }

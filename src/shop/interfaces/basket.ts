@@ -13,6 +13,11 @@ export interface RemoveProductFromBasketResponse {
   isSuccess: boolean;
 }
 
+export interface GetStatisticsResponse {
+  itemInBasketAvgPrice: number;
+  basketAvgTotalPrice: number;
+}
+
 export type ProductsFromBasketResponse = BasketItem[];
 
 export type GetTotalPriceResponse = number | { isSuccess: false };
