@@ -1,9 +1,6 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { BasketService } from '../basket/basket.service';
-import {
-  GetPaginatedListResponse,
-  GetProductListResponse,
-} from './interfaces/shop';
+import { GetPaginatedListResponse } from './interfaces/shop';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ShopItem } from './shop-item.entity';
 import { Repository } from 'typeorm';
@@ -46,10 +43,5 @@ export class ShopService {
 
   async hasProduct(name: string): Promise<boolean> {
     return (await this.getProducts()).items.some((item) => item.id === name);
-  }
-
-  async getPriceOfProduct(name: string): Promise<number> {
-    return (await this.getProducts()).items.find((item) => item.id === name)
-      .price;
   }
 }

@@ -4,7 +4,6 @@ import { BasketService } from './basket.service';
 import { ShopModule } from '../shop/shop.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BasketItem } from './basket-item.entity';
-import { UserService } from '../user/user.service';
 import { UserModule } from '../user/user.module';
 
 @Module({

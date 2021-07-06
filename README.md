@@ -7,6 +7,11 @@
 ```bash
 $ yarn
 ```
+## MongoDB configuration
+```bash
+$ cp .env.tmp .env
+Change MONGO_DB_CONNECTION_STRING to proper one
+```
 ## Mysql on Mac
 ```bash
 $ brew install mysql
