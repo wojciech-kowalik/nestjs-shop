@@ -1,5 +1,4 @@
-export class AddSloganDto {
-  id: string;
+export class SloganDto {
   description: string;
   isHighlighted: boolean;
 }
