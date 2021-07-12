@@ -11,13 +11,16 @@ import {
 import { Slogan } from './slogan.schema';
 import { SloganService } from './slogan.service';
 import { SloganDto } from './dto/slogan.dto';
+import { DescriptionLengthPipe } from '../pipes/description-length.pipe';
 
 @Controller('slogan')
 export class SloganController {
   constructor(@Inject(SloganService) private sloganService: SloganService) {}
 
   @Post('/')
-  create(@Body() sloganDto: SloganDto): Promise<Slogan> {
+  create(
+    @Body(new DescriptionLengthPipe({ minLength: 50 })) sloganDto: SloganDto,
+  ): Promise<Slogan> {
     return this.sloganService.create(sloganDto);
   }
 
@@ -32,7 +35,10 @@ export class SloganController {
   }
 
   @Put('/:id')
-  update(@Body() sloganDto: SloganDto, @Param('id') id: string): Promise<Slogan> {
+  update(
+    @Body() sloganDto: SloganDto,
+    @Param('id') id: string,
+  ): Promise<Slogan> {
     return this.sloganService.update(id, sloganDto);
   }
 }

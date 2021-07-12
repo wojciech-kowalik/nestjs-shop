@@ -6,6 +6,7 @@ import {
   Post,
   Get,
   Param,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { AddProductDto } from './dto/add-product.dto';
 import {
@@ -34,7 +35,9 @@ export class BasketController {
   }
 
   @Delete('/:id')
-  delete(@Param('id') id: string): Promise<RemoveProductFromBasketResponse> {
+  delete(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<RemoveProductFromBasketResponse> {
     return this.basketService.remove(id);
   }
 
