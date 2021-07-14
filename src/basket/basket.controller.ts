@@ -7,6 +7,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AddProductDto } from './dto/add-product.dto';
 import {
@@ -19,6 +20,7 @@ import {
   RemoveProductFromBasketResponse,
 } from '../shop/interfaces/basket';
 import { BasketService } from './basket.service';
+import { TimeoutInterceptor } from '../interceptors/timeout.interceptor';
 
 @Controller('basket')
 export class BasketController {
@@ -47,6 +49,7 @@ export class BasketController {
   }
 
   @Get('/statistics')
+  @UseInterceptors(TimeoutInterceptor)
   getStatistics(): Promise<GetStatisticsResponse> {
     return this.basketService.getStatistics();
   }
