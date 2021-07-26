@@ -4,6 +4,7 @@ import { RegisterUserResponse } from '../shop/interfaces/user';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
+import { hashPwd } from '../utils/hash-pwd';
 
 @Injectable()
 export class UserService {
@@ -12,8 +13,21 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async register(user: RegisterDto): Promise<RegisterUserResponse> {
-    return await this.userRepository.save(user);
+  filter(user: User): RegisterUserResponse {
+    const { id, email } = user;
+    return {
+      id,
+      email,
+    };
+  }
+
+  async register(newUser: RegisterDto): Promise<RegisterUserResponse> {
+    const user = new User();
+    user.email = newUser.email;
+    user.pwdHash = hashPwd(newUser.password);
+    await this.userRepository.save(user);
+
+    return this.filter(user);
   }
 
   async getUser(id: string): Promise<User> {

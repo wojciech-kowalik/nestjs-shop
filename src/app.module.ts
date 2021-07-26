@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { SloganModule } from './slogan/slogan.module';
 import { CronModule } from './cron/cron.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CronModule } from './cron/cron.module';
     UserModule,
     SloganModule,
     CronModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

@@ -8,6 +8,7 @@ import {
   Param,
   ParseUUIDPipe,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { AddProductDto } from './dto/add-product.dto';
 import {
@@ -21,12 +22,14 @@ import {
 } from '../shop/interfaces/basket';
 import { BasketService } from './basket.service';
 import { TimeoutInterceptor } from '../interceptors/timeout.interceptor';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('basket')
 export class BasketController {
   constructor(@Inject(BasketService) private basketService: BasketService) {}
 
   @Post('/')
+  @UseGuards(AuthGuard('jwt'))
   create(@Body() item: AddProductDto): Promise<AddProductToBasketResponse> {
     return this.basketService.add(item);
   }
