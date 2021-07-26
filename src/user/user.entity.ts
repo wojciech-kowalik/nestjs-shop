@@ -11,6 +11,15 @@ export class User {
   })
   email: string;
 
+  @Column()
+  pwdHash: string;
+
+  @Column({
+    nullable: true,
+    default: null,
+  })
+  currentTokenId: string | null;
+
   @OneToMany((type) => BasketItem, (entity) => entity.user)
   basketItems: BasketItem[];
 }
