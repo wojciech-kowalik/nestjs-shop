@@ -13,6 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { getConnection, Repository } from 'typeorm';
 import { BasketItem } from './basket-item.entity';
 import { UserService } from '../user/user.service';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class BasketService {
@@ -25,9 +26,11 @@ export class BasketService {
     private basketItemRepository: Repository<BasketItem>,
   ) {}
 
-  async add(item: AddProductDto): Promise<AddProductToBasketResponse> {
+  async add(
+    item: AddProductDto,
+    user: User,
+  ): Promise<AddProductToBasketResponse> {
     const shopItem = await this.shopService.getProduct(item.productId);
-    const user = await this.userService.getUser(item.userId);
 
     if (!shopItem) {
       return {

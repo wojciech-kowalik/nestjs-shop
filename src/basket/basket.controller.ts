@@ -23,6 +23,8 @@ import {
 import { BasketService } from './basket.service';
 import { TimeoutInterceptor } from '../interceptors/timeout.interceptor';
 import { AuthGuard } from '@nestjs/passport';
+import { UserObject } from '../decorators/user-object.decorator';
+import { User } from '../user/user.entity';
 
 @Controller('basket')
 export class BasketController {
@@ -30,8 +32,11 @@ export class BasketController {
 
   @Post('/')
   @UseGuards(AuthGuard('jwt'))
-  create(@Body() item: AddProductDto): Promise<AddProductToBasketResponse> {
-    return this.basketService.add(item);
+  create(
+    @Body() item: AddProductDto,
+    @UserObject() user: User,
+  ): Promise<AddProductToBasketResponse> {
+    return this.basketService.add(item, user);
   }
 
   @Delete('/clear/:userId')
